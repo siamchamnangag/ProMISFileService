@@ -1,38 +1,27 @@
 package com.scg.file.controller;
 
 import com.scg.file.Application;
-import com.scg.file.exception.DownloadFailedException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.web.context.WebApplicationContext;
-import sun.misc.IOUtils;
 
 import java.io.File;
-import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Base64;
 
-import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertNotNull;
-
-import static org.junit.Assert.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.setup.MockMvcBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 /**
  * Created by tanatloke on 7/12/2017 AD.
@@ -53,6 +42,9 @@ public class FileControllerTest {
     private WebApplicationContext webApplicationContext;
 
     private MockMvc mockMvc;
+
+    final String NOT_EXIST_URL = "https://github.com/siamchamnangag/ProMISFileService/raw/master/src/main/resources/NotExist.xlsx";
+    final String MALFORMED_PROTOCOL_URL = "wrongProtocol:notfoundAddress:-1";
 
     @Before
     public void setup() throws Exception {
@@ -81,6 +73,26 @@ public class FileControllerTest {
 //                .andExpect(jsonPath("$.body",containsString("UEsDBBQABgAIAAAAIQAbPQlu1QEAAHYJAAATAAgCW0NvbnRlbnRfVHlwZXNdLnhtbCCiBAI")));
 
 
+    }
+
+    @Test()
+    public void downloadWithNotExistUrlShouldReturnBadRequest() throws Exception {
+        mockMvc.perform(get("/files")
+                .param("url",NOT_EXIST_URL))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test()
+    public void downloadWithMalformedUrlShouldReturnBadRequest() throws Exception {
+        mockMvc.perform(get("/files")
+                .param("url",MALFORMED_PROTOCOL_URL))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test()
+    public void downloadWithoutRequiredParameterShouldReturnBadRequest() throws Exception {
+        mockMvc.perform(get("/files"))
+                .andExpect(status().isBadRequest());
     }
 
    /* @Test(expected = DownloadFailedException.class)

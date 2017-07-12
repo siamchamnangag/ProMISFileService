@@ -1,5 +1,6 @@
 package com.scg.file.service;
 
+import com.scg.file.common.SCGResponseBody;
 import com.scg.file.model.PostFileBody;
 import com.scg.file.model.PostFileResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,18 +25,21 @@ public class FileService {
     @Autowired
     RestTemplate restTemplate;
 
-    public ResponseEntity<byte[]> downloadFile(String documentUrl){
+    public ResponseEntity<?> downloadFile(String documentUrl){
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setAccept(Arrays.asList(MediaType.APPLICATION_OCTET_STREAM));
-        HttpEntity<String> entity = new HttpEntity<String>(headers);
-
-        return restTemplate.exchange(
-                documentUrl,
-                HttpMethod.GET,
-                entity,
-                byte[].class,
-                "1");
+        //supply required header for request if required
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setAccept(Arrays.asList(MediaType.APPLICATION_OCTET_STREAM));
+//
+//        HttpEntity<String> entity = new HttpEntity<String>(headers);
+        ResponseEntity<?> responseEntity;
+        try {
+            responseEntity = new ResponseEntity<>(restTemplate.getForEntity(
+                    documentUrl, byte[].class),HttpStatus.OK);
+        }catch (Exception ex){
+            responseEntity = new ResponseEntity<>(new SCGResponseBody(ex.getMessage()),HttpStatus.BAD_REQUEST);
+        }
+        return responseEntity;
     }
 
     public PostFileResponse uploadFile(MultipartFile uploadingFile) throws IOException{

@@ -1,4 +1,4 @@
-package com.scg.file.model;
+package com.scg.file.common;
 
 import org.springframework.util.MultiValueMap;
 
@@ -10,6 +10,7 @@ public class SCGResponseBody {
     private String message;
 
     public SCGResponseBody(String message) {
+        this.message = message;
     }
 
     public SCGResponseBody() {

@@ -1,6 +1,6 @@
 package com.scg.file.controller;
 
-import com.scg.file.model.SCGResponseBody;
+import com.scg.file.common.SCGResponseBody;
 import com.scg.file.service.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,7 +30,7 @@ public class FileController {
     @RequestMapping(method = RequestMethod.GET)
     ResponseEntity downloadFile(@RequestParam(required = true,value = "url") String documentUrl){
         //return file content
-        return new ResponseEntity(fileService.downloadFile(documentUrl), HttpStatus.OK);
+        return fileService.downloadFile(documentUrl);
     }
 
     @RequestMapping(method = RequestMethod.POST)
