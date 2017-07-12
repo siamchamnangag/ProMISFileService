@@ -1,0 +1,75 @@
+{
+	"id": "5e9bb705-e482-ef42-9de8-02a7e0092635",
+	"name": "Stubby4j Upload File",
+	"description": "",
+	"order": [
+		"cb10825a-a01e-4d1e-ef03-d7f4e6c30f85",
+		"366b775d-823a-5d56-6ac7-6a1f35f7649f"
+	],
+	"folders": [],
+	"timestamp": 1499872421998,
+	"owner": "2240689",
+	"public": false,
+	"requests": [
+		{
+			"id": "366b775d-823a-5d56-6ac7-6a1f35f7649f",
+			"headers": "Content-Type: application/json\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "localhost:8882/files",
+			"queryParams": [],
+			"preRequestScript": null,
+			"pathVariables": {},
+			"pathVariableData": [],
+			"method": "POST",
+			"data": [],
+			"dataMode": "raw",
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1499872665096,
+			"name": "POST localhost:8882/files 500",
+			"description": "",
+			"collectionId": "5e9bb705-e482-ef42-9de8-02a7e0092635",
+			"responses": [],
+			"rawModeData": "{\n  \"filename\": \"upload_failed.xlsx\",\n  \"content\": \"dummy content\"\n}"
+		},
+		{
+			"id": "cb10825a-a01e-4d1e-ef03-d7f4e6c30f85",
+			"headers": "Content-Type: application/json\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "localhost:8882/files",
+			"queryParams": [],
+			"pathVariables": {},
+			"pathVariableData": [],
+			"preRequestScript": null,
+			"method": "POST",
+			"collectionId": "5e9bb705-e482-ef42-9de8-02a7e0092635",
+			"data": [],
+			"dataMode": "raw",
+			"name": "POST localhost:8882/files 201",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1499872421998,
+			"version": 2,
+			"responses": [],
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"rawModeData": "{\n  \"filename\": \"PMoC_complexity_and_effort_assessment_2.xlsx\",\n  \"content\": \"dummy content\"\n}"
+		}
+	]
+}
