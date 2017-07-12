@@ -31,7 +31,7 @@ public class FileController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    ResponseEntity uploadFile(@RequestBody MultipartFile file){
+    ResponseEntity uploadFile(@RequestParam("file") MultipartFile file){
 
         ResponseEntity response;
 
@@ -45,7 +45,7 @@ public class FileController {
 
         }catch(Exception ex){
 
-            response = new ResponseEntity(new SCGResponseBody("runtime error"),HttpStatus.INTERNAL_SERVER_ERROR);
+            response = new ResponseEntity(new SCGResponseBody(ex.getMessage()),HttpStatus.INTERNAL_SERVER_ERROR);
 
         }
 
