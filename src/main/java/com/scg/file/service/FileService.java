@@ -1,5 +1,6 @@
 package com.scg.file.service;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 /**
@@ -7,6 +8,10 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class FileService {
+
+    @Value("${download.test.fileUrl}")
+    private String testFileUrl;
+
 
     public byte[] downloadFile(String documentUrl){
         return documentUrl.getBytes();
