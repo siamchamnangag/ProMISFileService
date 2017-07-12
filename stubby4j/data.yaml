@@ -1,0 +1,41 @@
+-  request:
+      method: POST
+      url: /files
+      headers:
+         content-type: application/json
+      post: >
+        {
+          "filename": "upload_failed.xlsx",
+          "content": "(.*)"
+        }
+
+   response:
+      status: 500
+      headers:
+         content-type: application/json
+      body: >
+        {
+          "message": "upload failed"
+        }
+        
+-  request:
+      method: POST
+      url: /files
+      headers:
+         content-type: application/json
+      post: >
+        {
+          "filename": "(.*)",
+          "content": "(.*)"
+        }
+
+   response:
+      status: 201
+      headers:
+         content-type: application/json
+      body: >
+        {
+          "link": "https://github.com/siamchamnangag/ProMISFileService/raw/master/src/main/resources/<%post.1%>",
+          "message": "successfully created"
+        }
+        
