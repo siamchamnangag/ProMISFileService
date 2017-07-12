@@ -19,6 +19,10 @@ public class FileController {
     @Autowired
     FileService fileService;
 
+    public FileController(FileService fileService) {
+        this.fileService = fileService;
+    }
+
     @RequestMapping(method = RequestMethod.GET)
     ResponseEntity downloadFile(@RequestParam(required = true,value = "url") String documentUrl){
         //return file content
@@ -29,5 +33,7 @@ public class FileController {
     ResponseEntity uploadFile(){
         return new ResponseEntity("document uploaded", HttpStatus.OK);
     }
+
+
 
 }
