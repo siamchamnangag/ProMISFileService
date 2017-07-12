@@ -21,8 +21,6 @@ public class FileService {
     @Value("${upload.postFileUrl}")
     private String postFileUrl;
 
-
-
     @Autowired
     RestTemplate restTemplate;
 
