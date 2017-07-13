@@ -64,7 +64,7 @@ public class FileControllerTest {
     final String MALFORMED_PROTOCOL_URL = "wrongProtocol:notfoundAddress:-1";
 
 
-        @Before
+    @Before
     public void setup() throws Exception {
         //initialize mock mvc
         this.mockMvc = webAppContextSetup(webApplicationContext).build();
@@ -138,8 +138,6 @@ public class FileControllerTest {
                     .param("description","fail").contentType("application/json")
             ).andExpect(status().isInternalServerError())
                     .andExpect(jsonPath("$.message", is("upload failed") ));
-
-
     }
    /* @Test(expected = DownloadFailedException.class)
     public void downloadFileFailShouldReturnDownloadFailedException() throws Exception {
