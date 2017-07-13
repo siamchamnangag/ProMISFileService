@@ -34,13 +34,13 @@ public class FileController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    ResponseEntity uploadFile(@RequestParam("file") MultipartFile file){
+    ResponseEntity uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("description") String description){
 
         ResponseEntity response;
 
         try{
 
-            response = new ResponseEntity(fileService.uploadFile(file), HttpStatus.CREATED);
+            response = new ResponseEntity(fileService.uploadFile(file,description), HttpStatus.CREATED);
 
         }catch (IOException ioException){
 

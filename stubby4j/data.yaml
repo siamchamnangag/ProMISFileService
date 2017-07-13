@@ -5,7 +5,7 @@
          content-type: application/json
       post: >
         {
-          "filename": "upload_failed.xlsx",
+          "filename": "Upload_Failed.xlsx",
           "content": "(.*)"
         }
 
