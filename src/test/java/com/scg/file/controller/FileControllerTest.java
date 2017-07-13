@@ -6,19 +6,24 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Base64;
 
+import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.core.Is.is;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.fileUpload;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
@@ -93,6 +98,24 @@ public class FileControllerTest {
     public void downloadWithoutRequiredParameterShouldReturnBadRequest() throws Exception {
         mockMvc.perform(get("/files"))
                 .andExpect(status().isBadRequest());
+    }
+
+
+    @Test
+    public void uploadShouldSuccessAndGetCorrectFileName() throws Exception {
+
+        File testFile = new File("src/test/resources/PMoC_complexity_and_effort_assessment.xlsx");
+
+        FileInputStream testFileStream = new FileInputStream(testFile);
+
+        MockMultipartFile mockMultipartFile = new MockMultipartFile("file", "PMoC_complexity_and_effort_assessment.xlsx","multipart/form-data",testFileStream);
+
+        mockMvc.perform(fileUpload("/files").file(mockMultipartFile)
+                .param("description","Test")
+        )
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.message", is("successfully created") ))
+                .andExpect(jsonPath("$.link", allOf(containsString("Test"),containsString(".xlsx"))) );
     }
 
    /* @Test(expected = DownloadFailedException.class)
