@@ -7,6 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,7 +28,11 @@ import java.util.Date;
 public class FileService {
 
     @Value("${upload.postFileUrl}")
-    private String postFileUrl;
+    private String postFileServiceURL;
+
+    public String getPostFileServiceURL() {
+        return postFileServiceURL;
+    }
 
     @Autowired
     RestTemplate restTemplate;
@@ -46,17 +54,21 @@ public class FileService {
         return responseEntity;
     }
 
-    public PostFileResponse uploadFile(MultipartFile uploadingFile, String description) throws IOException{
+    public  ResponseEntity<PostFileResponse> uploadFile(MultipartFile uploadingFile, String description) throws IOException{
 
         //create file name from description
         String generatedFileName = generateFileName(uploadingFile.getOriginalFilename(), description, new Date());
+
         PostFileBody postBody = new PostFileBody(generatedFileName, uploadingFile.getBytes());
-//        PostFileBody postBody = new PostFileBody(generatedFileName, "dummy".getBytes());
+
         //upload file to external service
         HttpEntity<PostFileBody> requestEntity = new HttpEntity<>(postBody);
-//        System.out.println("post file url = "+postFileUrl);
-        return restTemplate.postForObject(postFileUrl, requestEntity, PostFileResponse.class);
-        //POST "http://document-api.cloudhub.io/mock/v1/sap/file"
+
+        try{
+            return new ResponseEntity<PostFileResponse>(restTemplate.postForObject(postFileServiceURL, requestEntity, PostFileResponse.class),HttpStatus.CREATED);
+        }catch (Exception e){
+            return new ResponseEntity<PostFileResponse>(new PostFileResponse("","upload failed"),HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     public String generateFileName(String originalFilename, String description,Date date) {

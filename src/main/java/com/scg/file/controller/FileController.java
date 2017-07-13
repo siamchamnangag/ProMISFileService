@@ -34,25 +34,9 @@ public class FileController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    ResponseEntity uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("description") String description){
+    ResponseEntity uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("description") String description) throws IOException {
+        return fileService.uploadFile(file,description);
 
-        ResponseEntity response;
-
-        try{
-
-            response = new ResponseEntity(fileService.uploadFile(file,description), HttpStatus.CREATED);
-
-        }catch (IOException ioException){
-
-            response = new ResponseEntity(new SCGResponseBody("upload failed"),HttpStatus.INTERNAL_SERVER_ERROR);
-
-        }catch(Exception ex){
-
-            response = new ResponseEntity(new SCGResponseBody(ex.getMessage()),HttpStatus.INTERNAL_SERVER_ERROR);
-
-        }
-
-        return response;
     }
 
 
