@@ -1,6 +1,8 @@
 package com.scg.file.controller;
 
 import com.scg.file.common.SCGResponseBody;
+import com.scg.file.model.PostFileBody;
+import com.scg.file.model.UploadDTO;
 import com.scg.file.service.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -36,7 +38,11 @@ public class FileController {
     @RequestMapping(method = RequestMethod.POST)
     ResponseEntity uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("description") String description) throws IOException {
         return fileService.uploadFile(file,description);
+    }
 
+    @RequestMapping(method = RequestMethod.POST,value = "/json")
+    ResponseEntity uploadFileByJson(@RequestBody UploadDTO uploadingBody) throws IOException {
+        return fileService.uploadFile(uploadingBody);
     }
 
 

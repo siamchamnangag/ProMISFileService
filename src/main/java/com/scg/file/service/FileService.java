@@ -3,6 +3,7 @@ package com.scg.file.service;
 import com.scg.file.common.SCGResponseBody;
 import com.scg.file.model.PostFileBody;
 import com.scg.file.model.PostFileResponse;
+import com.scg.file.model.UploadDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -71,6 +72,21 @@ public class FileService {
         }
     }
 
+    public ResponseEntity uploadFile(UploadDTO uploadingBody) {
+        //create file name from description
+        String generatedFileName = generateFileName(uploadingBody.getFilename(), uploadingBody.getDescription(), new Date());
+        PostFileBody postBody = new PostFileBody(generatedFileName, uploadingBody.getContent());
+
+        //upload file to external service
+        HttpEntity<PostFileBody> requestEntity = new HttpEntity<>(postBody);
+
+        try{
+            return new ResponseEntity<PostFileResponse>(restTemplate.postForObject(postFileServiceURL, requestEntity, PostFileResponse.class),HttpStatus.CREATED);
+        }catch (Exception e){
+            return new ResponseEntity<PostFileResponse>(new PostFileResponse("","upload failed"),HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     public String generateFileName(String originalFilename, String description,Date date) {
         String fileExtension = getFileExtensionFromStringFileName(originalFilename);
 
@@ -90,4 +106,6 @@ public class FileService {
 
         return extension;
     }
+
+
 }
