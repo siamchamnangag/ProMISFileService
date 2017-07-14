@@ -140,6 +140,16 @@ public class FileControllerTest {
                     .andExpect(jsonPath("$.message", is("upload failed") ));
     }
 
+
+    @Test
+    public void uploadShouldFailWhenJsonDescriptionContainsFail() throws Exception {
+
+        String mockJson = "{\"filename\":\"fail.extension\", \"content\":\"xxxxxxxx\", \"description\":\"fail\"}";
+
+        mockMvc.perform(post("/files/json").contentType("application/json").content(mockJson)).andExpect(status().isInternalServerError())
+                .andExpect(jsonPath("$.message", is("upload failed") ));
+    }
+
     @Test
     public void uploadWithJsonShouldOkAndReturnCorrectResponse() throws Exception {
 
