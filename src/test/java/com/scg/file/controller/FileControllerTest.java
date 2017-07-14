@@ -3,6 +3,7 @@ package com.scg.file.controller;
 import com.scg.file.Application;
 import com.scg.file.model.PostFileBody;
 import com.scg.file.model.PostFileResponse;
+import com.scg.file.model.UploadDTO;
 import com.scg.file.service.FileService;
 import org.junit.Before;
 import org.junit.Test;
@@ -124,7 +125,6 @@ public class FileControllerTest {
 
     }
 
-
     @Test
     public void uploadShouldFailWhenDescriptionContainsFail() throws Exception {
 
@@ -139,22 +139,17 @@ public class FileControllerTest {
             ).andExpect(status().isInternalServerError())
                     .andExpect(jsonPath("$.message", is("upload failed") ));
     }
-   /* @Test(expected = DownloadFailedException.class)
-    public void downloadFileFailShouldReturnDownloadFailedException() throws Exception {
 
-    }*/
-
- /*
-
-    //example for json based controller response test
     @Test
-    public void example() throws Exception {
-        mockMvc.perform(post("/george/bookmarks/")
-                .content(this.json(new Bookmark()))
-                .contentType(contentType))
-                .andExpect(status().isNotFound());
+    public void uploadWithJsonShouldOkAndReturnCorrectResponse() throws Exception {
 
-    }*/
 
+        String mockJson = "{\"filename\":\"filename.extension\", \"content\":\"xxxxxxxx\", \"description\":\"Description\"}";
+
+        mockMvc.perform(post("/files/json").contentType("application/json").content(mockJson)
+        ).andExpect(status().isCreated())
+                .andExpect(jsonPath("$.link", allOf(containsString("Description"),containsString(".extension"))))
+                .andExpect(jsonPath("$.message", is("successfully created") ));
+    }
 
 }
