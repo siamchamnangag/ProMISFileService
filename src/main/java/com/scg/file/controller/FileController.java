@@ -26,9 +26,6 @@ public class FileController {
         this.fileService = fileService;
     }
 
-    /*
-    accept file url and return downloaded content as byte[]
-     */
     @RequestMapping(method = RequestMethod.GET)
     ResponseEntity downloadFile(@RequestParam(required = true,value = "url") String documentUrl){
         //return file content
@@ -44,7 +41,5 @@ public class FileController {
     ResponseEntity uploadFileByJson(@RequestBody UploadDTO uploadingBody) throws IOException {
         return fileService.uploadFile(uploadingBody);
     }
-
-
 
 }
